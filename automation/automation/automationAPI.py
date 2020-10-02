@@ -36,3 +36,71 @@ def command_view():
     }
 
     return json.dumps(response), 200
+
+
+@automation_api.route("/mtu5")
+def mtu5_view():
+    mtu5 = automation["mtu5"]
+    if not mtu5:
+        return "Bad request. Server data failure.", 400
+    response = {
+        "name": mtu5[0].name,
+        "result": mtu5[0].result.result,
+        "indication": mtu5[0].result.indication,
+    }
+
+    return json.dumps(response), 200
+
+
+@automation_api.route("/ain8")
+def ain8_view():
+    ain8 = automation["ain8"]
+    if not ain8:
+        return "Bad request. Server data failure.", 400
+    response = {
+        "name": ain8[0].name,
+        "result": ain8[0].result.result,
+        "indication": ain8[0].result.indication,
+    }
+
+    return json.dumps(response), 200
+
+
+@automation_api.route("/result")
+def module_result_view():
+    module_result = automation.module_result
+    response = {
+        "name": automation.module.name,
+        "result": module_result.result,
+        "indication": module_result.indication,
+    }
+
+    return json.dumps(response), 200
+
+
+@automation_api.route("/dout_din16")
+def dout_din16_view():
+    dout_din16 = automation["dout_din16"]
+    if not dout_din16:
+        return "Bad request. Server data failure.", 400
+    response = {
+        "name": dout_din16[0].name,
+        "result": dout_din16[0].result.result,
+        "indication": dout_din16[0].result.indication,
+    }
+
+    return json.dumps(response), 200
+
+
+@automation_api.route("/dout_din32")
+def dout_din32_view():
+    dout_din32 = automation["dout_din32"]
+    if not dout_din32:
+        return "Bad request. Server data failure.", 400
+    response = {
+        "name": dout_din32[0].name,
+        "result": dout_din32[0].result.result,
+        "indication": dout_din32[0].result.indication,
+    }
+
+    return json.dumps(response), 200
