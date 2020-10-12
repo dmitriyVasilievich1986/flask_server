@@ -1,9 +1,9 @@
 # region import libraries
 
+from ..database import Column, DataBase, Relationship, STRING, INTEGER, Model
 from .resultValue import ResultValue
-from ..command import Command
 from ..supportClass import BColors
-from ..application.database import db
+from ..command import Command
 from ..modules import Module
 
 from datetime import datetime
@@ -16,46 +16,21 @@ import json
 # endregion
 
 
-class RS485(db.Model):
+class RS485(Model):
 
     """Base class to work on rs485 line.
     """
 
-    # db columns init
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False, unique=True)
-    port = db.Column(db.String(50), nullable=False, default="COM1")
-    address = db.Column(db.Integer, nullable=False, default=1)
-    module_id = db.Column(db.Integer, db.ForeignKey("module.id"), nullable=False, default=1)
+    db = DataBase(
+        "rs485",
+        Column("name", STRING, unique=True, nullable=False),
+        Column("port", STRING),
+        Column("address", INTEGER),
+        Relationship("module_id", "module", Module)
+    )
 
-    def __init__(
-        self,
-        name=None,
-        port=None,
-        address=None,
-        module_id=None,
-        *args,
-        **kwargs
-    ):
-        self.name = name or self.name
-        self.port = port or self.port
-        self.module_id = module_id or self.module_id
-        self.address = address or self.address
-
-    def __str__(self, *args, **kwargs):
-        return json.dumps({
-            "name": self.name,
-            "port": self.port,
-            "address": self.address,
-            "module": self.module.name
-            if self.module.name
-            else "",
-        })
-
-    def __repr__(self, *args, **kwargs):
-        return 'RS485 instance. Name: "{}", Module: "{}", Port: "{}", Sending data: {}\n'.format(
-            self.name, self.module.name if self.module else "", self.port, self.sending_data
-        )
+    def __init__(self, *args, **kwargs):
+        super(RS485, self).__init__(**kwargs)
 
     def open_port(self, result=None, *args, **kwargs):
         self.result = result or ResultValue()
@@ -261,6 +236,8 @@ class RS485(db.Model):
 
     @property
     def module(self, *args, **kwargs):
-        return Module.query.get(self.module_id)
+        module = Module()
+        module.get_object(id=self.module_id)
+        return module
 
     # endregion

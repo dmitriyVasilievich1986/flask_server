@@ -1,5 +1,9 @@
+from os import path
+
+BASE_DIR = path.dirname(path.dirname(path.dirname(path.abspath(__file__))))
+
+
 class ConfigurationBase:
-    SQLALCHEMY_DATABASE_URI = "sqlite:///sample.db"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
